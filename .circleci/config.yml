@@ -1,0 +1,29 @@
+version: 2.1
+
+jobs:
+  machine_dlc:
+    machine:
+      docker_layer_caching: true
+    steps:
+    - run: which docker
+    - run: docker -v
+    - run:
+        name: Build a really docker image
+        command: |
+          dockerfile=Dockerfile
+          echo "FROM alpine:latest" > $dockerfile
+          echo "RUN echo hello" >> $dockerfile
+          docker build -f $dockerfile --tag throwaway:$CIRCLE_BUILD_NUM .
+          docker run --rm throwaway:$CIRCLE_BUILD_NUM
+    - run: docker version
+    - run:
+        name: Retrive logs
+        command: journalctl --no-pager
+        when: always
+
+    
+workflows:
+  version: 2
+  vm_jobs:
+    jobs:
+      - machine_dlc
