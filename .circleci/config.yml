@@ -15,6 +15,7 @@ jobs:
           echo "RUN echo hello" >> $dockerfile
           docker build -f $dockerfile --tag throwaway:$CIRCLE_BUILD_NUM .
           docker run --rm throwaway:$CIRCLE_BUILD_NUM
+    - run: docker save -o save-image/$CIRCLE_BUILD_NUM throwaway:$CIRCLE_BUILD_NUM 
     - run: docker version
     - run:
         name: Retrive logs
