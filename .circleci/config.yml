@@ -11,8 +11,9 @@ jobs:
         name: Build a really docker image
         command: |
           dockerfile=Dockerfile
-          echo "FROM alpine:latest" > $dockerfile
+          echo "FROM ubuntu:22.04" > $dockerfile
           echo "RUN echo hello" >> $dockerfile
+          echo "RUN apt-get update && apt-get install -y autoconf build-essential ca-certificates cmake curl file gettext-base gnupg gzip jq libcurl4-openssl-dev libmagic-dev libmariadb-dev libpq-dev" >> $dockerfile
           docker build -f $dockerfile --tag throwaway:$CIRCLE_BUILD_NUM .
           docker run --rm throwaway:$CIRCLE_BUILD_NUM
     - run: mkdir -p docker-images/docker/
